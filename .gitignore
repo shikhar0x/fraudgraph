@@ -1,10 +1,35 @@
+# Python
 __pycache__/
 *.pyc
+*.pyo
 .venv/
 venv/
+*.egg-info/
+
+# Secrets / credentials — TigerGraph connection details, LLM API keys
 .env
+.env.*
+**/secrets.yaml
+**/credentials.json
+
+# Dataset — never commit raw data, only ingestion scripts
 data/raw/*
 !data/raw/.gitkeep
-outputs/*.json
+
+# The 20 submission files DO get committed — nothing here should touch cases/
+# (intentionally no ignore rule for cases/)
+
+# Editor / OS noise
+.vscode/
+.idea/
 .DS_Store
+*.swp
+
+# Logs, caches, notebook checkpoints
 *.log
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Demo video — large binary, host it externally (YouTube/Drive) and link in README instead of committing
+*.mp4
+*.mov
