@@ -1,0 +1,8 @@
+pyTigerGraph
+langgraph
+langchain-core
+fastapi
+uvicorn
+pandas
+python-dotenv
+pytest
