@@ -9,6 +9,7 @@ venv/
 # Secrets / credentials — TigerGraph connection details, LLM API keys
 .env
 .env.*
+!.env.example
 **/secrets.yaml
 **/credentials.json
 
