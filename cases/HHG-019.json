@@ -1,0 +1,112 @@
+{
+  "case_id": "HHG-019",
+  "case": {
+    "status": "closed_legitimate",
+    "verdict": "legitimate",
+    "fraud_probability": 0.02,
+    "pattern": "none",
+    "pattern_description": "",
+    "affected_txn_ids": [],
+    "first_suspicious_txn_id": "",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Alert HHG-019 trigger_type=risk_score: Real-time model scored transaction 3503878 ($99.92, online) at 0.90. Review and decide.",
+        "source": "external",
+        "ref": "case_pack.csv",
+        "entity_ids": [
+          "3503878",
+          "C07987-K2",
+          "C07987"
+        ]
+      },
+      {
+        "claim": "Flagged transaction 3503878 $99.92, channel=online, risk_score=0.9, billing_region=unknown",
+        "source": "graph",
+        "ref": "query:get_transaction(txn_id=3503878)",
+        "entity_ids": [
+          "3503878"
+        ]
+      },
+      {
+        "claim": "1 transaction(s) on the same card within a 24h window of 3503878",
+        "source": "graph",
+        "ref": "query:card_window(card_id=C07987-K2, hours=24)",
+        "entity_ids": [
+          "3503878"
+        ]
+      },
+      {
+        "claim": "Every transaction carries a risk_score between 0 and 1 from the bank's detection model. The model is useful and imperfect: many high scores are legitimate, and some fraud scores low. A score is a reason to look, never a verdict. The only confirmed outcomes are in the closed cases.",
+        "source": "document",
+        "ref": "docs/fraud_policy.md#policy-risk",
+        "entity_ids": []
+      },
+      {
+        "claim": "A suspicious activity report (FILE_REPORT) is a regulatory filing. File one when fraud is confirmed or strongly suspected AND at least one of these holds: exposure exceeds $1,000; the activity connects to a shared device profile, a shared region cluster, or another customer's fraud; the pattern is coordinated or undocumented (rule R9). A report always has a case behind it. The narrative must stand on its own: who, what, when, where, how, and why.",
+        "source": "document",
+        "ref": "docs/fraud_policy.md#policy-sar",
+        "entity_ids": []
+      },
+      {
+        "claim": "R1. Verify before you block on a weak signal. If the case rests on a single signal (including a risk score alone) and your assessed fraud probability is below 0.70, recommend VERIFY_WITH_CUSTOMER or STEP_UP_AUTH before any block. Blocking a legitimate customer on one signal is a policy breach.",
+        "source": "document",
+        "ref": "docs/fraud_policy.md#policy-r1",
+        "entity_ids": []
+      },
+      {
+        "claim": "Customer confirms they made the transaction.",
+        "source": "customer",
+        "ref": "evidence_request:customer_validation",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Investigation of 3503878 on card C07987-K2 did not establish a fraud episode. Assessed fraud probability is 0.02 from 1 independent evidence group(s). Risk score was treated as a reason to look, not a verdict. Recommended action is to close the alert as no fraud.",
+    "written_to_graph": false,
+    "graph_case_id": ""
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 0,
+      "assumed_response": "Customer confirms they made the transaction."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "policy 3a: open a case"
+      }
+    ],
+    "final": [
+      {
+        "action": "CLOSE_NO_FRAUD",
+        "route": "auto",
+        "reason": "R3"
+      }
+    ],
+    "what_changed": "Evidence requests updated the recommendation. Customer confirms they made the transaction. Initial actions ['VERIFY_WITH_CUSTOMER', 'CREATE_CASE'] became ['CLOSE_NO_FRAUD']."
+  },
+  "sar": {
+    "file": false,
+    "reason": "Policy 3a: SAR not required (not confirmed/strong fraud with a filing trigger).",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "A verification response settled the question.",
+  "tool_calls": 13,
+  "tokens": 65,
+  "latency_s": 0.012
+}

@@ -1,0 +1,119 @@
+{
+  "case_id": "HHG-018",
+  "case": {
+    "status": "closed_fraud",
+    "verdict": "fraud",
+    "fraud_probability": 0.46,
+    "pattern": "none",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3491361"
+    ],
+    "first_suspicious_txn_id": "3491361",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 39.08,
+    "evidence": [
+      {
+        "claim": "Alert HHG-018 trigger_type=customer_report: Customer C02354 message: 'I never made this $39.08 purchase. Please check my card.' Refers to 3491361.",
+        "source": "external",
+        "ref": "case_pack.csv",
+        "entity_ids": [
+          "3491361",
+          "C02354-K2",
+          "C02354"
+        ]
+      },
+      {
+        "claim": "Flagged transaction 3491361 $39.08, channel=unknown, risk_score=0.0, billing_region=unknown",
+        "source": "graph",
+        "ref": "query:get_transaction(txn_id=3491361)",
+        "entity_ids": [
+          "3491361"
+        ]
+      },
+      {
+        "claim": "1 transaction(s) on the same card within a 24h window of 3491361",
+        "source": "graph",
+        "ref": "query:card_window(card_id=C02354-K2, hours=24)",
+        "entity_ids": [
+          "3491361"
+        ]
+      },
+      {
+        "claim": "Every transaction carries a risk_score between 0 and 1 from the bank's detection model. The model is useful and imperfect: many high scores are legitimate, and some fraud scores low. A score is a reason to look, never a verdict. The only confirmed outcomes are in the closed cases.",
+        "source": "document",
+        "ref": "docs/fraud_policy.md#policy-risk",
+        "entity_ids": []
+      },
+      {
+        "claim": "A suspicious activity report (FILE_REPORT) is a regulatory filing. File one when fraud is confirmed or strongly suspected AND at least one of these holds: exposure exceeds $1,000; the activity connects to a shared device profile, a shared region cluster, or another customer's fraud; the pattern is coordinated or undocumented (rule R9). A report always has a case behind it. The narrative must stand on its own: who, what, when, where, how, and why.",
+        "source": "document",
+        "ref": "docs/fraud_policy.md#policy-sar",
+        "entity_ids": []
+      },
+      {
+        "claim": "R1. Verify before you block on a weak signal. If the case rests on a single signal (including a risk score alone) and your assessed fraud probability is below 0.70, recommend VERIFY_WITH_CUSTOMER or STEP_UP_AUTH before any block. Blocking a legitimate customer on one signal is a policy breach.",
+        "source": "document",
+        "ref": "docs/fraud_policy.md#policy-r1",
+        "entity_ids": []
+      },
+      {
+        "claim": "Customer reaffirms they did not authorize the flagged transaction and still have the card.",
+        "source": "customer",
+        "ref": "evidence_request:customer_validation",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Investigation of flagged transaction 3491361 on card C02354-K2 concludes fraud (probability 0.46, pattern none). Episode includes 1 transaction(s), exposure $39.08. Customer response interpreted as denies. Actions follow the fraud policy rule engine, not the raw risk score.",
+    "written_to_graph": false,
+    "graph_case_id": ""
+  },
+  "evidence_requests": [
+    {
+      "type": "customer_validation",
+      "asked_after_step": 0,
+      "assumed_response": "Customer reaffirms they did not authorize the flagged transaction and still have the card."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "policy 3a: open a case"
+      }
+    ],
+    "final": [
+      {
+        "action": "BLOCK_CARD",
+        "route": "L1",
+        "reason": "R2"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "R2"
+      }
+    ],
+    "what_changed": "Evidence requests updated the recommendation. Customer reaffirms they did not authorize the flagged transaction and still have the card. Initial actions ['VERIFY_WITH_CUSTOMER', 'CREATE_CASE'] became ['BLOCK_CARD', 'CREATE_CASE']."
+  },
+  "sar": {
+    "file": false,
+    "reason": "Policy 3a: SAR not required (not confirmed/strong fraud with a filing trigger).",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "A verification response settled the question.",
+  "tool_calls": 13,
+  "tokens": 68,
+  "latency_s": 0.012
+}

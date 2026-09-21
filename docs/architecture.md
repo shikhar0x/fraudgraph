@@ -1,6 +1,8 @@
 # Architecture — Agentic Fraud Investigation (TigerGraph HHGoa Task 4)
 
-Purpose of this file: the single source of truth for how the system fits together. Any AI agent (or human) working on one module should read this first and not need to ask what another module does or produces.
+Purpose of this file: the single source of truth for how the system fits together.
+
+**Implementation note (2026-09-21):** The seven layers below are implemented in this repo (local graph adapter when TigerGraph is unavailable). Section 4 contracts are unchanged. Any AI agent (or human) working on one module should read this first and not need to ask what another module does or produces.
 
 ## 1. One-line description
 

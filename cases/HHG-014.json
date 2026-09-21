@@ -1,0 +1,114 @@
+{
+  "case_id": "HHG-014",
+  "case": {
+    "status": "open",
+    "verdict": "uncertain",
+    "fraud_probability": 0.16,
+    "pattern": "none",
+    "pattern_description": "",
+    "affected_txn_ids": [
+      "3478561"
+    ],
+    "first_suspicious_txn_id": "3478561",
+    "connected_card_ids": [],
+    "connected_device_profiles": [],
+    "exposure_usd": 0.0,
+    "evidence": [
+      {
+        "claim": "Alert HHG-014 trigger_type=analyst_request: Analyst request: several cards this month show purchases from the same unusual device profile. Review transaction 3478561 on card C13487-K1 and look for related activity.",
+        "source": "external",
+        "ref": "case_pack.csv",
+        "entity_ids": [
+          "3478561",
+          "C13487-K1",
+          "C13487"
+        ]
+      },
+      {
+        "claim": "Flagged transaction 3478561 $0.00, channel=unknown, risk_score=0.0, billing_region=unknown",
+        "source": "graph",
+        "ref": "query:get_transaction(txn_id=3478561)",
+        "entity_ids": [
+          "3478561"
+        ]
+      },
+      {
+        "claim": "1 transaction(s) on the same card within a 24h window of 3478561",
+        "source": "graph",
+        "ref": "query:card_window(card_id=C13487-K1, hours=24)",
+        "entity_ids": [
+          "3478561"
+        ]
+      },
+      {
+        "claim": "Every transaction carries a risk_score between 0 and 1 from the bank's detection model. The model is useful and imperfect: many high scores are legitimate, and some fraud scores low. A score is a reason to look, never a verdict. The only confirmed outcomes are in the closed cases.",
+        "source": "document",
+        "ref": "docs/fraud_policy.md#policy-risk",
+        "entity_ids": []
+      },
+      {
+        "claim": "A suspicious activity report (FILE_REPORT) is a regulatory filing. File one when fraud is confirmed or strongly suspected AND at least one of these holds: exposure exceeds $1,000; the activity connects to a shared device profile, a shared region cluster, or another customer's fraud; the pattern is coordinated or undocumented (rule R9). A report always has a case behind it. The narrative must stand on its own: who, what, when, where, how, and why.",
+        "source": "document",
+        "ref": "docs/fraud_policy.md#policy-sar",
+        "entity_ids": []
+      },
+      {
+        "claim": "R1. Verify before you block on a weak signal. If the case rests on a single signal (including a risk score alone) and your assessed fraud probability is below 0.70, recommend VERIFY_WITH_CUSTOMER or STEP_UP_AUTH before any block. Blocking a legitimate customer on one signal is a policy breach.",
+        "source": "document",
+        "ref": "docs/fraud_policy.md#policy-r1",
+        "entity_ids": []
+      },
+      {
+        "claim": "Analyst notes: reviewed graph neighbourhood for C13487-K1. Working hypothesis is pattern=none. No additional confirmed-fraud neighbours were documented in retrieved closed cases.",
+        "source": "external",
+        "ref": "evidence_request:analyst_info",
+        "entity_ids": []
+      }
+    ],
+    "similar_prior_cases": [],
+    "summary": "Investigation of flagged transaction 3478561 on card C13487-K1 concludes uncertain (probability 0.16, pattern none). Episode includes 1 transaction(s), exposure $0.00. Actions follow the fraud policy rule engine, not the raw risk score.",
+    "written_to_graph": false,
+    "graph_case_id": ""
+  },
+  "evidence_requests": [
+    {
+      "type": "analyst_info",
+      "asked_after_step": 0,
+      "assumed_response": "Analyst notes: reviewed graph neighbourhood for C13487-K1. Working hypothesis is pattern=none. No additional confirmed-fraud neighbours were documented in retrieved closed cases."
+    }
+  ],
+  "next_best_actions": {
+    "initial": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1"
+      }
+    ],
+    "final": [
+      {
+        "action": "VERIFY_WITH_CUSTOMER",
+        "route": "auto",
+        "reason": "R1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "policy 3a: open a case"
+      }
+    ],
+    "what_changed": "Evidence requests updated the recommendation. Analyst notes: reviewed graph neighbourhood for C13487-K1. Working hypothesis is pattern=none. No additional confirmed-fraud neighbours were documented in retrieved closed cases. Initial actions ['VERIFY_WITH_CUSTOMER'] became ['VERIFY_WITH_CUSTOMER', 'CREATE_CASE']."
+  },
+  "sar": {
+    "file": false,
+    "reason": "Policy 3a: SAR not required (not confirmed/strong fraud with a filing trigger).",
+    "narrative": "",
+    "subjects": [],
+    "total_amount_usd": 0.0,
+    "activity_dates": []
+  },
+  "stop_reason": "Additional evidence is unlikely to change the decision: remaining graph queries repeat cached facts.",
+  "tool_calls": 13,
+  "tokens": 59,
+  "latency_s": 0.013
+}

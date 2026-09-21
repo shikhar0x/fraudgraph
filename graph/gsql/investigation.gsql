@@ -1,0 +1,189 @@
+// Investigation queries for FraudGraph.
+// Traversals use named reverse edges created by WITH REVERSE_EDGE.
+// primary_id_as_attribute="true" so WHERE t.txn_id == ... is valid.
+//
+// Install: USE GRAPH FraudGraph  then this file, then INSTALL QUERY ALL
+// Or: python -m app.setup_graph --install-queries
+
+USE GRAPH FraudGraph
+
+CREATE OR REPLACE QUERY get_transaction(STRING txn_id) FOR GRAPH FraudGraph {
+  result = SELECT t FROM Transaction:t WHERE t.txn_id == txn_id;
+  PRINT result;
+}
+
+CREATE OR REPLACE QUERY get_card(STRING card_id) FOR GRAPH FraudGraph {
+  result = SELECT c FROM Card:c WHERE c.card_id == card_id;
+  PRINT result;
+}
+
+CREATE OR REPLACE QUERY get_customer(STRING customer_id) FOR GRAPH FraudGraph {
+  result = SELECT c FROM Customer:c WHERE c.customer_id == customer_id;
+  cards = SELECT k FROM result:c -(OWNS>)- Card:k;
+  PRINT result, cards;
+}
+
+CREATE OR REPLACE QUERY card_history(STRING card_id, INT limit_n) FOR GRAPH FraudGraph {
+  TYPEDEF TUPLE<STRING id, DATETIME ts, DOUBLE amount, STRING channel, DOUBLE risk_score, STRING product_cd, STRING addr1> Row;
+  ListAccum<Row> @@rows;
+  Seed = SELECT c FROM Card:c WHERE c.card_id == card_id;
+  txns = SELECT t FROM Seed:c -(MADE>)- Transaction:t
+         ACCUM @@rows += Row(t.txn_id, t.ts, t.amount, t.channel, t.risk_score, t.product_cd, t.addr1)
+         ORDER BY t.ts DESC
+         LIMIT limit_n;
+  PRINT txns, @@rows;
+}
+
+CREATE OR REPLACE QUERY customer_history(STRING customer_id, INT limit_n) FOR GRAPH FraudGraph {
+  TYPEDEF TUPLE<STRING id, STRING card_id, DATETIME ts, DOUBLE amount, STRING channel, DOUBLE risk_score> Row;
+  ListAccum<Row> @@rows;
+  Seed = SELECT c FROM Customer:c WHERE c.customer_id == customer_id;
+  cards = SELECT k FROM Seed:c -(OWNS>)- Card:k;
+  txns = SELECT t FROM cards:k -(MADE>)- Transaction:t
+         ACCUM @@rows += Row(t.txn_id, k.card_id, t.ts, t.amount, t.channel, t.risk_score)
+         ORDER BY t.ts DESC
+         LIMIT limit_n;
+  PRINT cards, txns, @@rows;
+}
+
+CREATE OR REPLACE QUERY transaction_window(STRING txn_id) FOR GRAPH FraudGraph {
+  TYPEDEF TUPLE<STRING id, DATETIME ts, DOUBLE amount, STRING channel, DOUBLE risk_score, STRING addr1> Row;
+  ListAccum<Row> @@rows;
+  Center = SELECT t FROM Transaction:t WHERE t.txn_id == txn_id;
+  SeedCard = SELECT c FROM Center:t -(MADE_BY>)- Card:c;
+  Neigh = SELECT n FROM SeedCard:c -(MADE>)- Transaction:n
+          ACCUM @@rows += Row(n.txn_id, n.ts, n.amount, n.channel, n.risk_score, n.addr1);
+  PRINT Center, @@rows;
+}
+
+CREATE OR REPLACE QUERY device_neighbors(STRING device_id) FOR GRAPH FraudGraph {
+  SetAccum<STRING> @@cards;
+  SetAccum<STRING> @@txns;
+  SetAccum<STRING> @@customers;
+  Dev = SELECT d FROM DeviceProfile:d WHERE d.device_id == device_id;
+  Tx = SELECT t FROM Dev:d -(DEVICE_OF>)- Transaction:t
+       ACCUM @@txns += t.txn_id;
+  Cards = SELECT c FROM Tx:t -(MADE_BY>)- Card:c
+          ACCUM @@cards += c.card_id;
+  Cust = SELECT u FROM Cards:c -(OWNED_BY>)- Customer:u
+         ACCUM @@customers += u.customer_id;
+  PRINT Dev, @@cards, @@txns, @@customers;
+}
+
+CREATE OR REPLACE QUERY region_neighbors(STRING region) FOR GRAPH FraudGraph {
+  SetAccum<STRING> @@cards;
+  SumAccum<INT> @@txn_count;
+  Reg = SELECT r FROM BillingRegion:r WHERE r.region == region;
+  Tx = SELECT t FROM Reg:r -(BILLED_IN_OF>)- Transaction:t
+       ACCUM @@txn_count += 1;
+  Cards = SELECT c FROM Tx:t -(MADE_BY>)- Card:c
+          ACCUM @@cards += c.card_id;
+  PRINT Reg, @@txn_count, @@cards;
+}
+
+CREATE OR REPLACE QUERY connected_cards(STRING card_id) FOR GRAPH FraudGraph {
+  SetAccum<STRING> @@via_device;
+  SetAccum<STRING> @@via_email;
+  Seed = SELECT c FROM Card:c WHERE c.card_id == card_id;
+  Tx = SELECT t FROM Seed:c -(MADE>)- Transaction:t;
+  Dev = SELECT d FROM Tx:t -(FROM_DEVICE>)- DeviceProfile:d;
+  OtherTxD = SELECT t2 FROM Dev:d -(DEVICE_OF>)- Transaction:t2;
+  OtherCD = SELECT c2 FROM OtherTxD:t2 -(MADE_BY>)- Card:c2
+            WHERE c2.card_id != card_id
+            ACCUM @@via_device += c2.card_id;
+  Em = SELECT e FROM Tx:t -(PURCHASER_EMAIL>)- EmailDomain:e;
+  OtherTxE = SELECT t3 FROM Em:e -(PURCHASER_EMAIL_OF>)- Transaction:t3;
+  OtherCE = SELECT c3 FROM OtherTxE:t3 -(MADE_BY>)- Card:c3
+            WHERE c3.card_id != card_id
+            ACCUM @@via_email += c3.card_id;
+  PRINT @@via_device, @@via_email;
+}
+
+CREATE OR REPLACE QUERY detect_card_testing(STRING card_id) FOR GRAPH FraudGraph {
+  SetAccum<STRING> @@episode;
+  OrAccum @@matched;
+  Seed = SELECT c FROM Card:c WHERE c.card_id == card_id;
+  Small = SELECT t FROM Seed:c -(MADE>)- Transaction:t
+          WHERE t.channel == "online" AND t.amount < 5.0;
+  Hit = SELECT t3 FROM Small:t0 -(NEXT>)- Transaction:t1 -(NEXT>)- Transaction:t2 -(NEXT>)- Transaction:t3
+        WHERE t1.channel == "online" AND t1.amount < 5.0
+          AND t2.channel == "online" AND t2.amount < 5.0
+          AND datetime_diff(t2.ts, t0.ts) <= 3600
+          AND t3.amount > 20.0
+        ACCUM @@matched += TRUE,
+              @@episode += t0.txn_id,
+              @@episode += t1.txn_id,
+              @@episode += t2.txn_id,
+              @@episode += t3.txn_id;
+  PRINT @@matched, @@episode;
+}
+
+CREATE OR REPLACE QUERY detect_cnp_burst(STRING card_id) FOR GRAPH FraudGraph {
+  SumAccum<INT> @@online_count;
+  SetAccum<STRING> @@online_ids;
+  Seed = SELECT c FROM Card:c WHERE c.card_id == card_id;
+  Online = SELECT t FROM Seed:c -(MADE>)- Transaction:t
+           WHERE t.channel == "online"
+           ACCUM @@online_count += 1, @@online_ids += t.txn_id;
+  PRINT @@online_count, @@online_ids, Online;
+}
+
+CREATE OR REPLACE QUERY detect_new_device(STRING card_id) FOR GRAPH FraudGraph {
+  SetAccum<STRING> @@new_txns;
+  SetAccum<STRING> @@devices;
+  Seed = SELECT c FROM Card:c WHERE c.card_id == card_id;
+  Tx = SELECT t FROM Seed:c -(MADE>)- Transaction:t
+       WHERE t.device_status == "New" OR t.device_status == "new"
+       ACCUM @@new_txns += t.txn_id;
+  Dev = SELECT d FROM Tx:t -(FROM_DEVICE>)- DeviceProfile:d
+        ACCUM @@devices += d.device_id;
+  PRINT @@new_txns, @@devices, Tx, Dev;
+}
+
+CREATE OR REPLACE QUERY detect_out_of_region(STRING card_id) FOR GRAPH FraudGraph {
+  SetAccum<STRING> @@regions;
+  MapAccum<STRING, INT> @@region_counts;
+  Seed = SELECT c FROM Card:c WHERE c.card_id == card_id;
+  Tx = SELECT t FROM Seed:c -(MADE>)- Transaction:t
+       ACCUM @@regions += t.addr1,
+             @@region_counts += (t.addr1 -> 1);
+  PRINT @@regions, @@region_counts, Tx;
+}
+
+CREATE OR REPLACE QUERY related_closed_cases(STRING card_id, STRING customer_id) FOR GRAPH FraudGraph {
+  SetAccum<STRING> @@ids;
+  OnCard = SELECT cc FROM ClosedCase:cc -(ON_CARD>)- Card:k
+           WHERE k.card_id == card_id
+           ACCUM @@ids += cc.case_id;
+  Connected = SELECT cc FROM ClosedCase:cc -(CONNECTED_TO>)- Card:k
+              WHERE k.card_id == card_id
+              ACCUM @@ids += cc.case_id;
+  SameCust = SELECT cc FROM ClosedCase:cc
+             WHERE cc.customer_id == customer_id
+             ACCUM @@ids += cc.case_id;
+  PRINT @@ids, OnCard, Connected, SameCust;
+}
+
+CREATE OR REPLACE QUERY write_investigation_case(
+  STRING case_id,
+  STRING customer_id,
+  STRING card_id,
+  STRING status,
+  STRING verdict,
+  DOUBLE fraud_probability,
+  STRING pattern,
+  STRING pattern_description,
+  DOUBLE exposure_usd,
+  STRING summary,
+  BOOL sar_filed,
+  STRING flagged_txn_id
+) FOR GRAPH FraudGraph {
+  INSERT INTO InvestigationCase VALUES (
+    case_id, customer_id, card_id, now(), status, verdict,
+    fraud_probability, pattern, pattern_description, exposure_usd,
+    summary, sar_filed
+  );
+  INSERT INTO IC_ON_CARD VALUES (case_id, card_id);
+  INSERT INTO IC_INVOLVES VALUES (case_id, flagged_txn_id);
+  PRINT case_id;
+}

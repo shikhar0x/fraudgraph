@@ -1,0 +1,115 @@
+// Alternative deploy path: empty graph already exists (Savanna default).
+// Run after: CREATE GRAPH FraudGraph()
+//
+// USE GRAPH FraudGraph
+// then this job.
+
+USE GRAPH FraudGraph
+
+CREATE SCHEMA_CHANGE JOB fraud_schema FOR GRAPH FraudGraph {
+  ADD VERTEX Customer (
+    PRIMARY_ID customer_id STRING
+  ) WITH primary_id_as_attribute="true";
+
+  ADD VERTEX Card (
+    PRIMARY_ID card_id STRING,
+    customer_id STRING,
+    network STRING,
+    card_type STRING,
+    card1 STRING
+  ) WITH primary_id_as_attribute="true";
+
+  ADD VERTEX Transaction (
+    PRIMARY_ID txn_id STRING,
+    ts DATETIME,
+    amount DOUBLE,
+    product_cd STRING,
+    channel STRING,
+    risk_score DOUBLE,
+    addr1 STRING,
+    addr2 STRING,
+    p_email STRING,
+    r_email STRING,
+    dist1 DOUBLE,
+    dist2 DOUBLE,
+    device_status STRING,
+    proxy STRING,
+    device_type STRING
+  ) WITH primary_id_as_attribute="true";
+
+  ADD VERTEX DeviceProfile (
+    PRIMARY_ID device_id STRING,
+    device_info STRING,
+    os STRING,
+    browser STRING,
+    screen STRING,
+    device_type STRING
+  ) WITH primary_id_as_attribute="true";
+
+  ADD VERTEX EmailDomain (
+    PRIMARY_ID domain STRING
+  ) WITH primary_id_as_attribute="true";
+
+  ADD VERTEX BillingRegion (
+    PRIMARY_ID region STRING,
+    country STRING
+  ) WITH primary_id_as_attribute="true";
+
+  ADD VERTEX ClosedCase (
+    PRIMARY_ID case_id STRING,
+    customer_id STRING,
+    card_id STRING,
+    opened_at DATETIME,
+    closed_at DATETIME,
+    outcome STRING,
+    pattern STRING,
+    first_fraud_txn_id STRING,
+    txn_ids STRING,
+    n_txns INT,
+    exposure_usd DOUBLE,
+    connected_card_ids STRING,
+    actions_taken STRING,
+    report_filed BOOL,
+    analyst_notes STRING
+  ) WITH primary_id_as_attribute="true";
+
+  ADD VERTEX InvestigationCase (
+    PRIMARY_ID case_id STRING,
+    customer_id STRING,
+    card_id STRING,
+    opened_at DATETIME,
+    status STRING,
+    verdict STRING,
+    fraud_probability DOUBLE,
+    pattern STRING,
+    pattern_description STRING,
+    exposure_usd DOUBLE,
+    summary STRING,
+    sar_filed BOOL
+  ) WITH primary_id_as_attribute="true";
+
+  ADD VERTEX PolicyChunk (
+    PRIMARY_ID chunk_id STRING,
+    title STRING,
+    body STRING,
+    kind STRING
+  ) WITH primary_id_as_attribute="true";
+
+  ADD DIRECTED EDGE OWNS (FROM Customer, TO Card) WITH REVERSE_EDGE="OWNED_BY";
+  ADD DIRECTED EDGE MADE (FROM Card, TO Transaction) WITH REVERSE_EDGE="MADE_BY";
+  ADD DIRECTED EDGE FROM_DEVICE (FROM Transaction, TO DeviceProfile) WITH REVERSE_EDGE="DEVICE_OF";
+  ADD DIRECTED EDGE PURCHASER_EMAIL (FROM Transaction, TO EmailDomain) WITH REVERSE_EDGE="PURCHASER_EMAIL_OF";
+  ADD DIRECTED EDGE RECIPIENT_EMAIL (FROM Transaction, TO EmailDomain) WITH REVERSE_EDGE="RECIPIENT_EMAIL_OF";
+  ADD DIRECTED EDGE BILLED_IN (FROM Transaction, TO BillingRegion) WITH REVERSE_EDGE="BILLED_IN_OF";
+  ADD DIRECTED EDGE NEXT (FROM Transaction, TO Transaction, gap_seconds INT) WITH REVERSE_EDGE="PREV";
+  ADD DIRECTED EDGE INVOLVES (FROM ClosedCase, TO Transaction) WITH REVERSE_EDGE="INVOLVED_IN";
+  ADD DIRECTED EDGE ON_CARD (FROM ClosedCase, TO Card) WITH REVERSE_EDGE="HAS_CLOSED_CASE";
+  ADD DIRECTED EDGE CONNECTED_TO (FROM ClosedCase, TO Card) WITH REVERSE_EDGE="CONNECTED_FROM";
+  ADD DIRECTED EDGE IC_INVOLVES (FROM InvestigationCase, TO Transaction) WITH REVERSE_EDGE="IC_INVOLVED_IN";
+  ADD DIRECTED EDGE IC_ON_CARD (FROM InvestigationCase, TO Card) WITH REVERSE_EDGE="HAS_INVESTIGATION";
+  ADD DIRECTED EDGE IC_CONNECTED_TO (FROM InvestigationCase, TO Card) WITH REVERSE_EDGE="IC_CONNECTED_FROM";
+  ADD DIRECTED EDGE IC_USED_DEVICE (FROM InvestigationCase, TO DeviceProfile) WITH REVERSE_EDGE="IC_DEVICE_OF";
+  ADD DIRECTED EDGE IC_SIMILAR_TO (FROM InvestigationCase, TO ClosedCase, score DOUBLE);
+}
+
+RUN SCHEMA_CHANGE JOB fraud_schema

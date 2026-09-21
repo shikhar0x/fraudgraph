@@ -1,8 +1,16 @@
-pyTigerGraph
-langgraph
-langchain-core
-fastapi
-uvicorn
-pandas
-python-dotenv
-pytest
+# FraudGraph — Python 3.11+
+pydantic>=2.0,<3
+pandas>=2.0,<3
+python-dotenv>=1.0,<2
+pytest>=7.0,<9
+streamlit>=1.28,<2
+langgraph>=0.2
+langchain-core>=0.2
+python-dateutil>=2.8
+httpx>=0.27
+
+# Live TigerGraph (optional at import time; required for FRAUDGRAPH_MODE=tigergraph)
+pyTigerGraph>=1.8
+
+# Optional: official MCP SDK if you run graph/mcp_server as a standalone MCP process
+# mcp>=1.0

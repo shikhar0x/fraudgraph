@@ -4,7 +4,7 @@ Read this before writing any code. Purpose: keep the agent from doing expensive,
 
 ## 1. Scope boundaries
 
-- Only work on the module owned by the person who is prompting you (see phases.md for ownership). Do not edit another owner's files unless explicitly told to, even if you think you see a bug — flag it instead.
+- Only work on the module owned by the person who is prompting you (see phases.md for ownership). Do not edit another owner's files unless explicitly told to, even if you think you see a bug — flag it instead. (2026-09-21: unified completion of remaining work was explicitly in scope.)
 - Do not add features beyond what's in architecture.md and projectrequirements.md. If something looks missing, ask before building it.
 - Do not integrate real third-party APIs for actions (payments, messaging, account freezing). Everything is mocked/stubbed per the challenge brief — building a real integration is wasted effort and a scope violation.
 

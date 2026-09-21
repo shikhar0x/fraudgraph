@@ -1,5 +1,7 @@
 # Phases & Ownership — 7-Day Plan, 3 People, Zero Overlap
 
+**2026-09-21 note:** Remaining implementation was completed as a single unified effort. The historical Person 1/2/3 split below is retained as the original plan; it is no longer an edit restriction.
+
 Rule for this file: each person owns a fixed set of modules for the entire project (see architecture.md Section 2). Nobody edits another person's module files without asking. Integration happens at defined sync points, not by merging into each other's work silently.
 
 Replace "Person 1/2/3" with actual names once assigned — keep the role definitions fixed regardless of who holds them.

@@ -1,0 +1,17 @@
+TransactionID,TransactionAmt,ProductCD,card1,card4,card6,addr1,addr2,P_emaildomain,R_emaildomain,customer_id,ts,channel,risk_score
+T1001,2.00,C,1111,visa,debit,100,87,gmail.com,gmail.com,C90001,2016-11-01 10:00:00,online,0.20
+T1002,1.50,C,1111,visa,debit,100,87,gmail.com,gmail.com,C90001,2016-11-01 10:10:00,online,0.22
+T1003,0.99,C,1111,visa,debit,100,87,gmail.com,gmail.com,C90001,2016-11-01 10:20:00,online,0.25
+T1004,250.00,H,1111,visa,debit,100,87,gmail.com,gmail.com,C90001,2016-11-01 10:50:00,online,0.81
+T2001,40.00,W,2222,visa,credit,200,87,yahoo.com,,C90002,2016-10-01 12:00:00,in_person,0.10
+T2002,40.00,W,2222,visa,credit,200,87,yahoo.com,,C90002,2016-11-01 12:00:00,in_person,0.11
+T2003,40.00,W,2222,visa,credit,200,87,yahoo.com,,C90002,2016-12-01 12:00:00,in_person,0.55
+T3001,20.00,W,3333,mastercard,debit,300,87,aol.com,,C90003,2016-09-01 09:00:00,in_person,0.10
+T3002,22.00,W,3333,mastercard,debit,300,87,aol.com,,C90003,2016-09-15 09:00:00,in_person,0.10
+T3003,85.00,W,3333,mastercard,debit,999,87,aol.com,,C90003,2016-11-20 15:00:00,in_person,0.70
+T3004,18.00,W,3333,mastercard,debit,300,87,aol.com,,C90003,2016-11-21 10:00:00,in_person,0.12
+T4001,15.00,C,4444,visa,debit,400,87,gmail.com,evil.com,C90004,2016-11-22 10:00:00,online,0.40
+T4002,16.00,C,5555,visa,debit,401,87,hotmail.com,evil.com,C90005,2016-11-22 10:05:00,online,0.41
+T5001,12.00,W,6666,visa,debit,500,87,gmail.com,,C90006,2016-08-01 08:00:00,in_person,0.05
+T5002,12.00,W,6666,visa,debit,500,87,gmail.com,,C90006,2016-09-01 08:00:00,in_person,0.05
+T5003,12.00,W,6666,visa,debit,500,87,gmail.com,,C90006,2016-10-01 08:00:00,in_person,0.60

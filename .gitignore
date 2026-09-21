@@ -15,6 +15,8 @@ venv/
 # Dataset — never commit raw data, only ingestion scripts
 data/raw/*
 !data/raw/.gitkeep
+data/processed/
+*.pkl
 
 # The 20 submission files DO get committed — nothing here should touch cases/
 # (intentionally no ignore rule for cases/)
