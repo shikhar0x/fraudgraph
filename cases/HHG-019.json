@@ -3,7 +3,7 @@
   "case": {
     "status": "closed_legitimate",
     "verdict": "legitimate",
-    "fraud_probability": 0.02,
+    "fraud_probability": 0.12,
     "pattern": "none",
     "pattern_description": "",
     "affected_txn_ids": [],
@@ -23,7 +23,7 @@
         ]
       },
       {
-        "claim": "Flagged transaction 3503878 $99.92, channel=online, risk_score=0.9, billing_region=unknown",
+        "claim": "Flagged transaction 3503878 $99.92, channel=online, risk_score=0.9, billing_region=264.0",
         "source": "graph",
         "ref": "query:get_transaction(txn_id=3503878)",
         "entity_ids": [
@@ -36,6 +36,19 @@
         "ref": "query:card_window(card_id=C07987-K2, hours=24)",
         "entity_ids": [
           "3503878"
+        ]
+      },
+      {
+        "claim": "Device profile seen on 5 card(s)",
+        "source": "graph",
+        "ref": "query:device_neighbors(device_id=Windows | other | chrome 61.0 | 1280x720)",
+        "entity_ids": [
+          "Windows | other | chrome 61.0 | 1280x720",
+          "C01104-K1",
+          "C01983-K1",
+          "C06224-K1",
+          "C07987-K1",
+          "C11309-K1"
         ]
       },
       {
@@ -57,14 +70,51 @@
         "entity_ids": []
       },
       {
+        "claim": "Prior closed case CC-2011 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-2011: cardholder C07987 reported unrecognized activity on card C07987-K2. 5 transaction(s) between 2016-08-10 and 2016-08-11 totaling $3,059.89 were confirmed fraudulent. C",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C07987-K2)",
+        "entity_ids": [
+          "CC-2011"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-2087 outcome=cleared pattern=none notes=Case CC-2087: model scored a $150.00 transaction at 0.94. Cardholder confirmed travel to the billing region in question. Alert cleared.",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C07987-K2)",
+        "entity_ids": [
+          "CC-2087"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-2860 outcome=confirmed_fraud pattern=card_not_present_fraud notes=Case CC-2860: cardholder C07987 reported unrecognized activity on card C07987-K2. 1 transaction(s) between 2016-08-31 and 2016-08-31 totaling $149.92 were confirmed fraudulent. Onl",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C07987-K2)",
+        "entity_ids": [
+          "CC-2860"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-5026 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-5026: cardholder C07987 reported unrecognized activity on card C07987-K2. 3 transaction(s) between 2016-10-18 and 2016-10-18 totaling $309.86 were confirmed fraudulent. Car",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C07987-K2)",
+        "entity_ids": [
+          "CC-5026"
+        ]
+      },
+      {
         "claim": "Customer confirms they made the transaction.",
         "source": "customer",
         "ref": "evidence_request:customer_validation",
         "entity_ids": []
       }
     ],
-    "similar_prior_cases": [],
-    "summary": "Investigation of 3503878 on card C07987-K2 did not establish a fraud episode. Assessed fraud probability is 0.02 from 1 independent evidence group(s). Risk score was treated as a reason to look, not a verdict. Recommended action is to close the alert as no fraud.",
+    "similar_prior_cases": [
+      "CC-2011",
+      "CC-2087",
+      "CC-2860",
+      "CC-5026"
+    ],
+    "summary": "Investigation of 3503878 on card C07987-K2 did not establish a fraud episode. Assessed fraud probability is 0.12 from 2 independent evidence group(s). Risk score was treated as a reason to look, not a verdict. Recommended action is to close the alert as no fraud.",
     "written_to_graph": false,
     "graph_case_id": ""
   },
@@ -108,5 +158,5 @@
   "stop_reason": "A verification response settled the question.",
   "tool_calls": 13,
   "tokens": 65,
-  "latency_s": 0.012
+  "latency_s": 0.027
 }

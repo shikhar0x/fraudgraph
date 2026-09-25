@@ -3,7 +3,7 @@
   "case": {
     "status": "closed_legitimate",
     "verdict": "legitimate",
-    "fraud_probability": 0.02,
+    "fraud_probability": 0.12,
     "pattern": "none",
     "pattern_description": "",
     "affected_txn_ids": [],
@@ -31,11 +31,55 @@
         ]
       },
       {
-        "claim": "1 transaction(s) on the same card within a 24h window of 3526826",
+        "claim": "25 transaction(s) on the same card within a 24h window of 3526826",
         "source": "graph",
         "ref": "query:card_window(card_id=C07671-K2, hours=24)",
         "entity_ids": [
-          "3526826"
+          "3524194",
+          "3524237",
+          "3524600",
+          "3524626",
+          "3524788",
+          "3525205",
+          "3525559",
+          "3525584",
+          "3525753",
+          "3525762",
+          "3525902",
+          "3526234",
+          "3526249",
+          "3526265",
+          "3526538",
+          "3526677",
+          "3526747",
+          "3526826",
+          "3526999",
+          "3527288",
+          "3527851",
+          "3528696",
+          "3529131",
+          "3529473",
+          "3529623"
+        ]
+      },
+      {
+        "claim": "Device profile seen on 253 card(s)",
+        "source": "graph",
+        "ref": "query:device_neighbors(device_id=Windows |  | chrome 66.0 |)",
+        "entity_ids": [
+          "Windows |  | chrome 66.0 |",
+          "C00045-K1",
+          "C00073-K1",
+          "C00140-K1",
+          "C00215-K1",
+          "C00253-K1",
+          "C00259-K1",
+          "C00294-K1",
+          "C00319-K1",
+          "C00405-K1",
+          "C00426-K1",
+          "C00466-K1",
+          "C00523-K1"
         ]
       },
       {
@@ -57,14 +101,51 @@
         "entity_ids": []
       },
       {
+        "claim": "Prior closed case CC-1475 outcome=confirmed_fraud pattern=account_takeover notes=Case CC-1475: cardholder C07671 reported unrecognized activity on card C07671-K2. 10 transaction(s) between 2016-07-26 and 2016-07-29 totaling $1,307.98 were confirmed fraudulent. ",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C07671-K2)",
+        "entity_ids": [
+          "CC-1475"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-3216 outcome=confirmed_fraud pattern=card_not_present_new_device notes=Case CC-3216: cardholder C07671 reported unrecognized activity on card C07671-K2. 3 transaction(s) between 2016-09-08 and 2016-09-08 totaling $449.97 were confirmed fraudulent. Onl",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C07671-K2)",
+        "entity_ids": [
+          "CC-3216"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-3761 outcome=cleared pattern=none notes=Case CC-3761: model scored a $3,891.01 transaction at 0.89. Cardholder confirmed the purchase. Amount unusual for this customer but consistent with their stated intent. Alert clear",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C07671-K2)",
+        "entity_ids": [
+          "CC-3761"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-4294 outcome=confirmed_fraud pattern=account_takeover notes=Case CC-4294: cardholder C07671 reported unrecognized activity on card C07671-K2. 2 transaction(s) between 2016-10-01 and 2016-10-02 totaling $506.01 were confirmed fraudulent. Mix",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C07671-K2)",
+        "entity_ids": [
+          "CC-4294"
+        ]
+      },
+      {
         "claim": "Customer confirms they made the transaction.",
         "source": "customer",
         "ref": "evidence_request:customer_validation",
         "entity_ids": []
       }
     ],
-    "similar_prior_cases": [],
-    "summary": "Investigation of 3526826 on card C07671-K2 did not establish a fraud episode. Assessed fraud probability is 0.02 from 1 independent evidence group(s). Risk score was treated as a reason to look, not a verdict. Recommended action is to close the alert as no fraud.",
+    "similar_prior_cases": [
+      "CC-1475",
+      "CC-3216",
+      "CC-3761",
+      "CC-4294"
+    ],
+    "summary": "Investigation of 3526826 on card C07671-K2 did not establish a fraud episode. Assessed fraud probability is 0.12 from 2 independent evidence group(s). Risk score was treated as a reason to look, not a verdict. Recommended action is to close the alert as no fraud.",
     "written_to_graph": false,
     "graph_case_id": ""
   },
@@ -81,6 +162,11 @@
         "action": "VERIFY_WITH_CUSTOMER",
         "route": "auto",
         "reason": "R1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "policy 3a: open a case"
       }
     ],
     "final": [
@@ -90,7 +176,7 @@
         "reason": "R3"
       }
     ],
-    "what_changed": "Evidence requests updated the recommendation. Customer confirms they made the transaction. Initial actions ['VERIFY_WITH_CUSTOMER'] became ['CLOSE_NO_FRAUD']."
+    "what_changed": "Evidence requests updated the recommendation. Customer confirms they made the transaction. Initial actions ['VERIFY_WITH_CUSTOMER', 'CREATE_CASE'] became ['CLOSE_NO_FRAUD']."
   },
   "sar": {
     "file": false,
@@ -103,5 +189,5 @@
   "stop_reason": "A verification response settled the question.",
   "tool_calls": 13,
   "tokens": 65,
-  "latency_s": 0.012
+  "latency_s": 0.028
 }

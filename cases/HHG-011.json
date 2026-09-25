@@ -3,7 +3,7 @@
   "case": {
     "status": "closed_fraud",
     "verdict": "fraud",
-    "fraud_probability": 0.46,
+    "fraud_probability": 0.6502,
     "pattern": "none",
     "pattern_description": "",
     "affected_txn_ids": [
@@ -11,7 +11,9 @@
     ],
     "first_suspicious_txn_id": "3583368",
     "connected_card_ids": [],
-    "connected_device_profiles": [],
+    "connected_device_profiles": [
+      "SM-G610F Build/NRD90M |  | chrome 66.0 for android |"
+    ],
     "exposure_usd": 131.3,
     "evidence": [
       {
@@ -25,7 +27,7 @@
         ]
       },
       {
-        "claim": "Flagged transaction 3583368 $131.30, channel=unknown, risk_score=0.0, billing_region=unknown",
+        "claim": "Flagged transaction 3583368 $131.30, channel=online, risk_score=0.39, billing_region=unknown",
         "source": "graph",
         "ref": "query:get_transaction(txn_id=3583368)",
         "entity_ids": [
@@ -33,11 +35,74 @@
         ]
       },
       {
-        "claim": "1 transaction(s) on the same card within a 24h window of 3583368",
+        "claim": "52 transaction(s) on the same card within a 24h window of 3583368",
         "source": "graph",
         "ref": "query:card_window(card_id=C11923-K2, hours=24)",
         "entity_ids": [
-          "3583368"
+          "3580907",
+          "3580933",
+          "3580951",
+          "3580992",
+          "3581048",
+          "3581345",
+          "3582082",
+          "3582107",
+          "3582142",
+          "3582175",
+          "3582178",
+          "3582327",
+          "3582338",
+          "3582375",
+          "3582413",
+          "3582602",
+          "3582624",
+          "3582671",
+          "3582738",
+          "3582868",
+          "3582897",
+          "3583101",
+          "3583140",
+          "3583199",
+          "3583229",
+          "3583348",
+          "3583368",
+          "3583406",
+          "3583411",
+          "3583415",
+          "3583417",
+          "3583435",
+          "3583494",
+          "3583644",
+          "3583670",
+          "3583866",
+          "3583914",
+          "3583968",
+          "3584003",
+          "3584153",
+          "3584155",
+          "3584401",
+          "3584460",
+          "3584516",
+          "3584693",
+          "3584706",
+          "3584859",
+          "3584962",
+          "3584985",
+          "3585055",
+          "3585064",
+          "3585345"
+        ]
+      },
+      {
+        "claim": "Device profile seen on 4 card(s)",
+        "source": "graph",
+        "ref": "query:device_neighbors(device_id=SM-G610F Build/NRD90M |  | chrome 66.0 for android |)",
+        "entity_ids": [
+          "SM-G610F Build/NRD90M |  | chrome 66.0 for android |",
+          "C03938-K1",
+          "C05595-K1",
+          "C05678-K1",
+          "C11923-K1"
         ]
       },
       {
@@ -59,14 +124,87 @@
         "entity_ids": []
       },
       {
+        "claim": "Prior closed case CC-0031 outcome=confirmed_fraud pattern=card_not_present_new_device notes=Case CC-0031: cardholder C11923 reported unrecognized activity on card C11923-K2. 1 transaction(s) between 2016-07-02 and 2016-07-02 totaling $20.36 were confirmed fraudulent. Onli",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C11923-K2)",
+        "entity_ids": [
+          "CC-0031"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-0290 outcome=confirmed_fraud pattern=card_testing notes=Case CC-0290: cardholder C11923 reported unrecognized activity on card C11923-K2. 8 transaction(s) between 2016-07-05 and 2016-07-08 totaling $144.56 were confirmed fraudulent. A r",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C11923-K2)",
+        "entity_ids": [
+          "CC-0290"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-1056 outcome=confirmed_fraud pattern=card_not_present_new_device notes=Case CC-1056: cardholder C11923 reported unrecognized activity on card C11923-K2. 28 transaction(s) between 2016-07-11 and 2016-07-22 totaling $1,557.95 were confirmed fraudulent. ",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C11923-K2)",
+        "entity_ids": [
+          "CC-1056"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-2247 outcome=confirmed_fraud pattern=card_testing notes=Case CC-2247: cardholder C11923 reported unrecognized activity on card C11923-K2. 71 transaction(s) between 2016-07-25 and 2016-08-16 totaling $4,886.18 were confirmed fraudulent. ",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C11923-K2)",
+        "entity_ids": [
+          "CC-2247"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-2673 outcome=confirmed_fraud pattern=card_testing notes=Case CC-2673: cardholder C11923 reported unrecognized activity on card C11923-K2. 33 transaction(s) between 2016-08-18 and 2016-08-27 totaling $1,334.96 were confirmed fraudulent. ",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C11923-K2)",
+        "entity_ids": [
+          "CC-2673"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-2799 outcome=confirmed_fraud pattern=card_not_present_new_device notes=Case CC-2799: cardholder C11923 reported unrecognized activity on card C11923-K2. 2 transaction(s) between 2016-08-29 and 2016-08-30 totaling $36.14 were confirmed fraudulent. Onli",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C11923-K2)",
+        "entity_ids": [
+          "CC-2799"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-3039 outcome=confirmed_fraud pattern=card_not_present_new_device notes=Case CC-3039: cardholder C11923 reported unrecognized activity on card C11923-K2. 8 transaction(s) between 2016-09-02 and 2016-09-04 totaling $108.85 were confirmed fraudulent. Onl",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C11923-K2)",
+        "entity_ids": [
+          "CC-3039"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-3206 outcome=confirmed_fraud pattern=card_not_present_new_device notes=Case CC-3206: cardholder C11923 reported unrecognized activity on card C11923-K2. 3 transaction(s) between 2016-09-06 and 2016-09-08 totaling $100.24 were confirmed fraudulent. Onl",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C11923-K2)",
+        "entity_ids": [
+          "CC-3206"
+        ]
+      },
+      {
         "claim": "Customer reaffirms they did not authorize the flagged transaction and still have the card.",
         "source": "customer",
         "ref": "evidence_request:customer_validation",
         "entity_ids": []
       }
     ],
-    "similar_prior_cases": [],
-    "summary": "Investigation of flagged transaction 3583368 on card C11923-K2 concludes fraud (probability 0.46, pattern none). Episode includes 1 transaction(s), exposure $131.30. Customer response interpreted as denies. Actions follow the fraud policy rule engine, not the raw risk score.",
+    "similar_prior_cases": [
+      "CC-0031",
+      "CC-0290",
+      "CC-1056",
+      "CC-2247",
+      "CC-2673",
+      "CC-2799",
+      "CC-3039",
+      "CC-3206"
+    ],
+    "summary": "Investigation of flagged transaction 3583368 on card C11923-K2 concludes fraud (probability 0.65, pattern none). Episode includes 1 transaction(s), exposure $131.30. Customer response interpreted as denies. Actions follow the fraud policy rule engine, not the raw risk score.",
     "written_to_graph": false,
     "graph_case_id": ""
   },
@@ -115,5 +253,5 @@
   "stop_reason": "A verification response settled the question.",
   "tool_calls": 13,
   "tokens": 68,
-  "latency_s": 0.013
+  "latency_s": 0.047
 }

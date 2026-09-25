@@ -6,7 +6,7 @@ def device_profile_id(device_info: str, os: str, browser: str, screen: str) -> s
     parts = [(device_info or "").strip(), (os or "").strip(), (browser or "").strip(), (screen or "").strip()]
     if not any(parts):
         return ""
-    return " | ".join(parts)
+    return " | ".join(parts).strip()
 
 
 def stringify(value) -> str:

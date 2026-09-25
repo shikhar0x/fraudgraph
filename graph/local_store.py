@@ -304,18 +304,20 @@ class LocalGraphStore:
         return {"region": str(region), "cards": cards[:200], "txn_count": len(self.region_txns.get(str(region), []))}
 
     def connected_cards(self, card_id: str) -> dict[str, Any]:
+        from graph.patterns import COMMON_EMAIL_DOMAINS
+
         via_device: set[str] = set()
         via_email: set[str] = set()
         via_region: set[str] = set()
         for txn in self._txns_for_card(card_id):
             d = txn.get("device_id") or ""
-            if d:
+            if d and 1 <= len(self.device_cards.get(d, set())) <= 60:
                 via_device |= self.device_cards.get(d, set())
-            e = txn.get("r_email") or txn.get("p_email") or ""
-            if e:
+            e = stringify(txn.get("r_email") or txn.get("p_email"))
+            if e and e.lower() not in COMMON_EMAIL_DOMAINS and 1 <= len(self.email_cards.get(e, set())) <= 12:
                 via_email |= self.email_cards.get(e, set())
             r = stringify(txn.get("addr1"))
-            if r and len(self.region_cards.get(r, set())) <= 12:
+            if r and 1 <= len(self.region_cards.get(r, set())) <= 12:
                 via_region |= self.region_cards.get(r, set())
         via_device.discard(card_id)
         via_email.discard(card_id)

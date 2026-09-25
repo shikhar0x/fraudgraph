@@ -300,6 +300,41 @@ def detect_account_takeover(txns: list[dict[str, Any]], around_txn_id: str | Non
     }
 
 
+COMMON_EMAIL_DOMAINS = {
+    "gmail.com",
+    "hotmail.com",
+    "yahoo.com",
+    "anonymous.com",
+    "aol.com",
+    "comcast.net",
+    "icloud.com",
+    "outlook.com",
+    "msn.com",
+    "att.net",
+    "sbcglobal.net",
+    "verizon.net",
+    "bellsouth.net",
+    "cox.net",
+    "charter.net",
+    "ymail.com",
+    "earthlink.net",
+    "yahoo.co.uk",
+    "yahoo.com.mx",
+    "yahoo.fr",
+    "hotmail.es",
+    "hotmail.co.uk",
+    "hotmail.de",
+    "embarqmail.com",
+    "mac.com",
+    "netzero.net",
+    "windstream.net",
+    "live.com",
+    "me.com",
+    "mail.com",
+    "protonmail.com",
+}
+
+
 def detect_shared_origin(
     txns: list[dict[str, Any]],
     card_id: str,
@@ -321,12 +356,12 @@ def detect_shared_origin(
     device_id = flagged.get("device_id") or ""
     if device_id and device_id in device_cards:
         others = set(device_cards[device_id]) - {card_id}
-        if others:
+        if 1 <= len(others) <= 60:
             candidates.append(("device", device_id, others))
-    r_email = flagged.get("r_email") or ""
-    if r_email and r_email in email_cards:
+    r_email = str(flagged.get("r_email") or "")
+    if r_email and r_email.lower() not in COMMON_EMAIL_DOMAINS and r_email in email_cards:
         others = set(email_cards[r_email]) - {card_id}
-        if others:
+        if 1 <= len(others) <= 12:
             candidates.append(("recipient_email", r_email, others))
     region = str(flagged.get("addr1") or "")
     if region and region in region_cards:

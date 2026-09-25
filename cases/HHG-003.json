@@ -3,7 +3,7 @@
   "case": {
     "status": "closed_fraud",
     "verdict": "fraud",
-    "fraud_probability": 0.46,
+    "fraud_probability": 0.652,
     "pattern": "none",
     "pattern_description": "",
     "affected_txn_ids": [
@@ -25,7 +25,7 @@
         ]
       },
       {
-        "claim": "Flagged transaction 3530164 $49.00, channel=unknown, risk_score=0.0, billing_region=unknown",
+        "claim": "Flagged transaction 3530164 $49.00, channel=in_person, risk_score=0.4, billing_region=330.0",
         "source": "graph",
         "ref": "query:get_transaction(txn_id=3530164)",
         "entity_ids": [
@@ -33,11 +33,23 @@
         ]
       },
       {
-        "claim": "1 transaction(s) on the same card within a 24h window of 3530164",
+        "claim": "13 transaction(s) on the same card within a 24h window of 3530164",
         "source": "graph",
         "ref": "query:card_window(card_id=C08623-K2, hours=24)",
         "entity_ids": [
-          "3530164"
+          "3527397",
+          "3527532",
+          "3528392",
+          "3528902",
+          "3529041",
+          "3529981",
+          "3530056",
+          "3530164",
+          "3531019",
+          "3531833",
+          "3532138",
+          "3532333",
+          "3532926"
         ]
       },
       {
@@ -59,14 +71,69 @@
         "entity_ids": []
       },
       {
+        "claim": "Prior closed case CC-1589 outcome=cleared pattern=none notes=Case CC-1589: model scored a $99.91 transaction at 0.94. Cardholder confirmed travel to the billing region in question. Alert cleared.",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08623-K2)",
+        "entity_ids": [
+          "CC-1589"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-2817 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-2817: cardholder C08623 reported unrecognized activity on card C08623-K2. 1 transaction(s) between 2016-08-30 and 2016-08-30 totaling $38.96 were confirmed fraudulent. Card",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08623-K2)",
+        "entity_ids": [
+          "CC-2817"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-2935 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-2935: cardholder C08623 reported unrecognized activity on card C08623-K2. 2 transaction(s) between 2016-09-02 and 2016-09-02 totaling $238.00 were confirmed fraudulent. Car",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08623-K2)",
+        "entity_ids": [
+          "CC-2935"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-3327 outcome=confirmed_fraud pattern=account_takeover notes=Case CC-3327: cardholder C08623 reported unrecognized activity on card C08623-K2. 3 transaction(s) between 2016-09-09 and 2016-09-10 totaling $528.69 were confirmed fraudulent. Mix",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08623-K2)",
+        "entity_ids": [
+          "CC-3327"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-3682 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-3682: cardholder C08623 reported unrecognized activity on card C08623-K2. 2 transaction(s) between 2016-09-17 and 2016-09-19 totaling $300.51 were confirmed fraudulent. Car",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08623-K2)",
+        "entity_ids": [
+          "CC-3682"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-4957 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-4957: cardholder C08623 reported unrecognized activity on card C08623-K2. 1 transaction(s) between 2016-10-16 and 2016-10-16 totaling $48.02 were confirmed fraudulent. Card",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08623-K2)",
+        "entity_ids": [
+          "CC-4957"
+        ]
+      },
+      {
         "claim": "Customer reaffirms they did not authorize the flagged transaction and still have the card.",
         "source": "customer",
         "ref": "evidence_request:customer_validation",
         "entity_ids": []
       }
     ],
-    "similar_prior_cases": [],
-    "summary": "Investigation of flagged transaction 3530164 on card C08623-K2 concludes fraud (probability 0.46, pattern none). Episode includes 1 transaction(s), exposure $49.00. Customer response interpreted as denies. Actions follow the fraud policy rule engine, not the raw risk score.",
+    "similar_prior_cases": [
+      "CC-1589",
+      "CC-2817",
+      "CC-2935",
+      "CC-3327",
+      "CC-3682",
+      "CC-4957"
+    ],
+    "summary": "Investigation of flagged transaction 3530164 on card C08623-K2 concludes fraud (probability 0.65, pattern none). Episode includes 1 transaction(s), exposure $49.00. Customer response interpreted as denies. Actions follow the fraud policy rule engine, not the raw risk score.",
     "written_to_graph": false,
     "graph_case_id": ""
   },
@@ -113,7 +180,7 @@
     "activity_dates": []
   },
   "stop_reason": "A verification response settled the question.",
-  "tool_calls": 13,
+  "tool_calls": 12,
   "tokens": 68,
-  "latency_s": 0.013
+  "latency_s": 0.024
 }

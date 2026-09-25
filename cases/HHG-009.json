@@ -3,8 +3,8 @@
   "case": {
     "status": "closed_fraud",
     "verdict": "fraud",
-    "fraud_probability": 0.46,
-    "pattern": "none",
+    "fraud_probability": 0.7844,
+    "pattern": "out_of_region_use",
     "pattern_description": "",
     "affected_txn_ids": [
       "3581141"
@@ -25,11 +25,27 @@
         ]
       },
       {
-        "claim": "Flagged transaction 3581141 $30.02, channel=unknown, risk_score=0.0, billing_region=unknown",
+        "claim": "Flagged transaction 3581141 $30.02, channel=online, risk_score=0.28, billing_region=203.0",
         "source": "graph",
         "ref": "query:get_transaction(txn_id=3581141)",
         "entity_ids": [
           "3581141"
+        ]
+      },
+      {
+        "claim": "Card C08299-K1 has 56 indexed transactions in the graph",
+        "source": "graph",
+        "ref": "query:card_history(card_id=C08299-K1)",
+        "entity_ids": [
+          "C08299-K1",
+          "3588950",
+          "3588919",
+          "3588905",
+          "3588876",
+          "3588874",
+          "3588859",
+          "3587043",
+          "3587042"
         ]
       },
       {
@@ -38,6 +54,16 @@
         "ref": "query:card_window(card_id=C08299-K1, hours=24)",
         "entity_ids": [
           "3581141"
+        ]
+      },
+      {
+        "claim": "Activity in billing region 203.0 with no prior history; home region 330.0 continues",
+        "source": "graph",
+        "ref": "query:detect_out_of_region(card_id=C08299-K1)",
+        "entity_ids": [
+          "3581141",
+          "203.0",
+          "330.0"
         ]
       },
       {
@@ -59,14 +85,87 @@
         "entity_ids": []
       },
       {
+        "claim": "Prior closed case CC-0002 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-0002: cardholder C06403 reported unrecognized activity on card C06403-K2. 1 transaction(s) between 2016-07-02 and 2016-07-02 totaling $117.05 were confirmed fraudulent. Car",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08299-K1)",
+        "entity_ids": [
+          "CC-0002"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-0004 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-0004: cardholder C13440 reported unrecognized activity on card C13440-K2. 2 transaction(s) between 2016-07-02 and 2016-07-02 totaling $857.92 were confirmed fraudulent. Car",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08299-K1)",
+        "entity_ids": [
+          "CC-0004"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-0005 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-0005: cardholder C08945 reported unrecognized activity on card C08945-K2. 1 transaction(s) between 2016-07-02 and 2016-07-02 totaling $39.92 were confirmed fraudulent. Card",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08299-K1)",
+        "entity_ids": [
+          "CC-0005"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-0006 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-0006: cardholder C11227 reported unrecognized activity on card C11227-K2. 1 transaction(s) between 2016-07-02 and 2016-07-02 totaling $265.07 were confirmed fraudulent. Car",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08299-K1)",
+        "entity_ids": [
+          "CC-0006"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-0016 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-0016: cardholder C03575 reported unrecognized activity on card C03575-K2. 1 transaction(s) between 2016-07-02 and 2016-07-02 totaling $68.46 were confirmed fraudulent. Card",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08299-K1)",
+        "entity_ids": [
+          "CC-0016"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-0030 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-0030: cardholder C04762 reported unrecognized activity on card C04762-K1. 1 transaction(s) between 2016-07-03 and 2016-07-03 totaling $59.01 were confirmed fraudulent. Card",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08299-K1)",
+        "entity_ids": [
+          "CC-0030"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-0041 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-0041: cardholder C07648 reported unrecognized activity on card C07648-K2. 1 transaction(s) between 2016-07-03 and 2016-07-03 totaling $75.03 were confirmed fraudulent. Card",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08299-K1)",
+        "entity_ids": [
+          "CC-0041"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-0043 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-0043: cardholder C10164 reported unrecognized activity on card C10164-K1. 1 transaction(s) between 2016-07-03 and 2016-07-03 totaling $87.01 were confirmed fraudulent. Card",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C08299-K1)",
+        "entity_ids": [
+          "CC-0043"
+        ]
+      },
+      {
         "claim": "Customer reaffirms they did not authorize the flagged transaction and still have the card.",
         "source": "customer",
         "ref": "evidence_request:customer_validation",
         "entity_ids": []
       }
     ],
-    "similar_prior_cases": [],
-    "summary": "Investigation of flagged transaction 3581141 on card C08299-K1 concludes fraud (probability 0.46, pattern none). Episode includes 1 transaction(s), exposure $30.02. Customer response interpreted as denies. Actions follow the fraud policy rule engine, not the raw risk score.",
+    "similar_prior_cases": [
+      "CC-0002",
+      "CC-0004",
+      "CC-0005",
+      "CC-0006",
+      "CC-0016",
+      "CC-0030",
+      "CC-0041",
+      "CC-0043"
+    ],
+    "summary": "Investigation of flagged transaction 3581141 on card C08299-K1 concludes fraud (probability 0.78, pattern out_of_region_use). Episode includes 1 transaction(s), exposure $30.02. Customer response interpreted as denies. Actions follow the fraud policy rule engine, not the raw risk score.",
     "written_to_graph": false,
     "graph_case_id": ""
   },
@@ -113,7 +212,7 @@
     "activity_dates": []
   },
   "stop_reason": "A verification response settled the question.",
-  "tool_calls": 13,
-  "tokens": 68,
-  "latency_s": 0.013
+  "tool_calls": 12,
+  "tokens": 71,
+  "latency_s": 0.024
 }

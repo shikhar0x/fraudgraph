@@ -3,7 +3,7 @@
   "case": {
     "status": "closed_legitimate",
     "verdict": "legitimate",
-    "fraud_probability": 0.02,
+    "fraud_probability": 0.12,
     "pattern": "none",
     "pattern_description": "",
     "affected_txn_ids": [],
@@ -31,11 +31,41 @@
         ]
       },
       {
-        "claim": "1 transaction(s) on the same card within a 24h window of 3514948",
+        "claim": "31 transaction(s) on the same card within a 24h window of 3514948",
         "source": "graph",
         "ref": "query:card_window(card_id=C09933-K2, hours=24)",
         "entity_ids": [
-          "3514948"
+          "3511937",
+          "3512302",
+          "3512690",
+          "3512716",
+          "3513073",
+          "3513079",
+          "3513351",
+          "3513366",
+          "3513495",
+          "3513664",
+          "3514092",
+          "3514137",
+          "3514145",
+          "3514278",
+          "3514335",
+          "3514573",
+          "3514948",
+          "3515001",
+          "3515045",
+          "3515193",
+          "3515709",
+          "3515752",
+          "3515777",
+          "3515982",
+          "3516208",
+          "3516823",
+          "3516828",
+          "3516867",
+          "3517307",
+          "3517314",
+          "3517460"
         ]
       },
       {
@@ -57,14 +87,87 @@
         "entity_ids": []
       },
       {
+        "claim": "Prior closed case CC-0104 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-0104: cardholder C09933 reported unrecognized activity on card C09933-K2. 1 transaction(s) between 2016-07-04 and 2016-07-04 totaling $92.02 were confirmed fraudulent. Card",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C09933-K2)",
+        "entity_ids": [
+          "CC-0104"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-0657 outcome=cleared pattern=none notes=Case CC-0657: model scored a $1,769.94 transaction at 0.90. Cardholder confirmed the purchase. Amount unusual for this customer but consistent with their stated intent. Alert clear",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C09933-K2)",
+        "entity_ids": [
+          "CC-0657"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-0765 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-0765: cardholder C09933 reported unrecognized activity on card C09933-K2. 13 transaction(s) between 2016-07-12 and 2016-07-18 totaling $1,664.54 were confirmed fraudulent. ",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C09933-K2)",
+        "entity_ids": [
+          "CC-0765"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-1228 outcome=confirmed_fraud pattern=account_takeover notes=Case CC-1228: cardholder C09933 reported unrecognized activity on card C09933-K2. 10 transaction(s) between 2016-07-20 and 2016-07-25 totaling $1,112.65 were confirmed fraudulent. ",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C09933-K2)",
+        "entity_ids": [
+          "CC-1228"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-1524 outcome=confirmed_fraud pattern=account_takeover notes=Case CC-1524: cardholder C09933 reported unrecognized activity on card C09933-K2. 14 transaction(s) between 2016-07-28 and 2016-08-01 totaling $3,532.83 were confirmed fraudulent. ",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C09933-K2)",
+        "entity_ids": [
+          "CC-1524"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-1682 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-1682: cardholder C09933 reported unrecognized activity on card C09933-K2. 1 transaction(s) between 2016-08-04 and 2016-08-04 totaling $206.01 were confirmed fraudulent. Car",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C09933-K2)",
+        "entity_ids": [
+          "CC-1682"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-2565 outcome=confirmed_fraud pattern=out_of_region_use notes=Case CC-2565: cardholder C09933 reported unrecognized activity on card C09933-K2. 6 transaction(s) between 2016-08-20 and 2016-08-23 totaling $513.80 were confirmed fraudulent. Car",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C09933-K2)",
+        "entity_ids": [
+          "CC-2565"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-2834 outcome=confirmed_fraud pattern=account_takeover notes=Case CC-2834: cardholder C09933 reported unrecognized activity on card C09933-K2. 4 transaction(s) between 2016-08-28 and 2016-08-30 totaling $387.92 were confirmed fraudulent. Mix",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C09933-K2)",
+        "entity_ids": [
+          "CC-2834"
+        ]
+      },
+      {
         "claim": "Customer confirms they made the transaction.",
         "source": "customer",
         "ref": "evidence_request:customer_validation",
         "entity_ids": []
       }
     ],
-    "similar_prior_cases": [],
-    "summary": "Investigation of 3514948 on card C09933-K2 did not establish a fraud episode. Assessed fraud probability is 0.02 from 1 independent evidence group(s). Risk score was treated as a reason to look, not a verdict. Recommended action is to close the alert as no fraud.",
+    "similar_prior_cases": [
+      "CC-0104",
+      "CC-0657",
+      "CC-0765",
+      "CC-1228",
+      "CC-1524",
+      "CC-1682",
+      "CC-2565",
+      "CC-2834"
+    ],
+    "summary": "Investigation of 3514948 on card C09933-K2 did not establish a fraud episode. Assessed fraud probability is 0.12 from 2 independent evidence group(s). Risk score was treated as a reason to look, not a verdict. Recommended action is to close the alert as no fraud.",
     "written_to_graph": false,
     "graph_case_id": ""
   },
@@ -106,7 +209,7 @@
     "activity_dates": []
   },
   "stop_reason": "A verification response settled the question.",
-  "tool_calls": 13,
+  "tool_calls": 12,
   "tokens": 65,
-  "latency_s": 0.012
+  "latency_s": 0.027
 }

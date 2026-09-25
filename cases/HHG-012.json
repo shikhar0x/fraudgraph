@@ -3,7 +3,7 @@
   "case": {
     "status": "closed_legitimate",
     "verdict": "legitimate",
-    "fraud_probability": 0.02,
+    "fraud_probability": 0.12,
     "pattern": "none",
     "pattern_description": "",
     "affected_txn_ids": [],
@@ -31,11 +31,17 @@
         ]
       },
       {
-        "claim": "1 transaction(s) on the same card within a 24h window of 3553342",
+        "claim": "7 transaction(s) on the same card within a 24h window of 3553342",
         "source": "graph",
         "ref": "query:card_window(card_id=C05876-K2, hours=24)",
         "entity_ids": [
-          "3553342"
+          "3550470",
+          "3551245",
+          "3552000",
+          "3552020",
+          "3553253",
+          "3553342",
+          "3554541"
         ]
       },
       {
@@ -57,14 +63,33 @@
         "entity_ids": []
       },
       {
+        "claim": "Prior closed case CC-0003 outcome=cleared pattern=none notes=Case CC-0003: model scored a $442.92 transaction at 0.91. Cardholder confirmed travel to the billing region in question. Alert cleared.",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C05876-K2)",
+        "entity_ids": [
+          "CC-0003"
+        ]
+      },
+      {
+        "claim": "Prior closed case CC-2370 outcome=confirmed_fraud pattern=card_not_present_fraud notes=Case CC-2370: cardholder C05876 reported unrecognized activity on card C05876-K2. 2 transaction(s) between 2016-08-19 and 2016-08-19 totaling $149.99 were confirmed fraudulent. Onl",
+        "source": "graph",
+        "ref": "query:related_closed_cases(card_id=C05876-K2)",
+        "entity_ids": [
+          "CC-2370"
+        ]
+      },
+      {
         "claim": "Customer confirms they made the transaction.",
         "source": "customer",
         "ref": "evidence_request:customer_validation",
         "entity_ids": []
       }
     ],
-    "similar_prior_cases": [],
-    "summary": "Investigation of 3553342 on card C05876-K2 did not establish a fraud episode. Assessed fraud probability is 0.02 from 1 independent evidence group(s). Risk score was treated as a reason to look, not a verdict. Recommended action is to close the alert as no fraud.",
+    "similar_prior_cases": [
+      "CC-0003",
+      "CC-2370"
+    ],
+    "summary": "Investigation of 3553342 on card C05876-K2 did not establish a fraud episode. Assessed fraud probability is 0.12 from 2 independent evidence group(s). Risk score was treated as a reason to look, not a verdict. Recommended action is to close the alert as no fraud.",
     "written_to_graph": false,
     "graph_case_id": ""
   },
@@ -81,6 +106,11 @@
         "action": "VERIFY_WITH_CUSTOMER",
         "route": "auto",
         "reason": "R1"
+      },
+      {
+        "action": "CREATE_CASE",
+        "route": "auto",
+        "reason": "policy 3a: open a case"
       }
     ],
     "final": [
@@ -90,7 +120,7 @@
         "reason": "R3"
       }
     ],
-    "what_changed": "Evidence requests updated the recommendation. Customer confirms they made the transaction. Initial actions ['VERIFY_WITH_CUSTOMER'] became ['CLOSE_NO_FRAUD']."
+    "what_changed": "Evidence requests updated the recommendation. Customer confirms they made the transaction. Initial actions ['VERIFY_WITH_CUSTOMER', 'CREATE_CASE'] became ['CLOSE_NO_FRAUD']."
   },
   "sar": {
     "file": false,
@@ -101,7 +131,7 @@
     "activity_dates": []
   },
   "stop_reason": "A verification response settled the question.",
-  "tool_calls": 13,
+  "tool_calls": 12,
   "tokens": 65,
-  "latency_s": 0.013
+  "latency_s": 0.023
 }

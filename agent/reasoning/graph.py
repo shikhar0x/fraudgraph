@@ -394,9 +394,14 @@ def _build_sar(state: InvestigationState, assessment: dict[str, Any], final) -> 
         dates=dates,
     )
     narrative, tokens = generate_text("sar", narrative_fb, narrative_fb)
-    subjects = [state["case_row"]["customer_id"], state["case_row"]["card_id"]]
-    subjects.extend(assessment.get("connected_card_ids") or [])
-    subjects.extend(assessment.get("connected_device_profiles") or [])
+    subjects = [
+        str(s)
+        for s in [state["case_row"]["customer_id"], state["case_row"]["card_id"]]
+        + list(assessment.get("connected_card_ids") or [])
+        + list(assessment.get("connected_device_profiles") or [])
+        if s
+    ]
+    subjects = list(dict.fromkeys(subjects))
     sar = build_sar(
         file=True,
         reason=reason,
